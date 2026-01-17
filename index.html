@@ -49,11 +49,10 @@
 </div>
 <script src="./main.js"></script>
 <script>
-Validator('#form-1', {
-  onsubmit: function(data) {
-    console.log(data)
-  }
-});
+var form = new Validator('#form-1');
+form.onsubmit = function(formData) {
+  console.log(formData);
+}
 
 </script>
 </body>

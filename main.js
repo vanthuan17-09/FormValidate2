@@ -1,8 +1,7 @@
-function Validator(formSelector, options) {
-    //gan gia tri mac dinh cho tham so khi dinh nghia
-    if(!options) {
-        options = {};
-    }
+function Validator(formSelector) {
+    var _this = this;
+    var formRules = {};
+
     function getParent(element, selector) {
         while(element.parentElement) {
             if(element.parentElement.matches(selector)) {
@@ -11,9 +10,6 @@ function Validator(formSelector, options) {
             element = element.parentElement;
         }
     }
-
-    var formRules = {};
-
     /*
     * Quy uoc tao rules
     * - Neu co loi thi Return lai error message
@@ -70,10 +66,11 @@ function Validator(formSelector, options) {
         function handleValidate(event) {
             var rules = formRules[event.target.name];
             var errorMessage ;
-            rules.some(function(rule) {
+
+            for(var rule of rules) {
                 errorMessage =  rule(event.target.value);
-                return errorMessage;
-            });
+                if(errorMessage) break;
+            }
 
             //Neu co loi thi hien thi message loi ra UI
             if(errorMessage) {
@@ -108,6 +105,8 @@ function Validator(formSelector, options) {
 formElement.onsubmit = function(event) {
     event.preventDefault();
 
+    console.log(_this)
+
     var inputs = formElement.querySelectorAll('[name][rules]');
     var isValid = true;
         for(var input of inputs){
@@ -118,7 +117,7 @@ formElement.onsubmit = function(event) {
 
     //KHi khong co loi thi submit form
     if(isValid) {
-       if(typeof options.onsubmit === 'function') {
+       if(typeof _this.onsubmit === 'function') {
         var EnableInput = formElement.querySelectorAll('[name]:not([disable])');
                     var formValue = Array.from(EnableInput).reduce(function (values, input) {
                         
@@ -145,7 +144,7 @@ formElement.onsubmit = function(event) {
                         return values;
               }, {});
               //goi lai ham onsubmit va tra ve gia tri cua form
-            options.onsubmit(formValue);
+            _this.onsubmit(formValue);
        }
        else{
         formElement.submit();
