@@ -51,4 +51,4 @@ function Validator(formSelector) {
     else{
         console.log("Tên form truyền vào không chính xác")
     }
-}
+}đ
